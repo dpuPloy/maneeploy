@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>\Responsive Piano</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/audiosynth.js"></script>
+</head>
+<body>
+    <div id="piano">
+    <div class="logo">Responsive Piano</div>
+        <div class="keys">
+            <!-- Small size -->
+            <div class="octave" data-octave="3">
+                <div class="key white" data-note="C" data-kb="a">C</div>
+                <div class="key black" data-note="C#" data-kb="w"></div>
+                <div class="key white" data-note="D" data-kb="s">D</div>
+                <div class="key black" data-note="D#" data-kb="e"></div>
+                <div class="key white" data-note="E" data-kb="d">E</div>
+                <div class="key white" data-note="F" data-kb="f">F</div>
+                <div class="key black" data-note="F#" data-kb="t"></div>
+                <div class="key white" data-note="G" data-kb="g">G</div>
+                <div class="key black" data-note="G#" data-kb="y"></div>
+                <div class="key white" data-note="A" data-kb="h">A</div>
+                <div class="key black" data-note="A#" data-kb="u"></div>
+                <div class="key white" data-note="B" data-kb="j">B</div>
+            </div>
+            <!-- Mediam size -->
+            <div class="octave" data-octave="4">
+                <div class="key white" data-note="C"></div>
+                <div class="key black" data-note="C#"></div>
+                <div class="key white" data-note="D"></div>
+                <div class="key black" data-note="D#"></div>
+                <div class="key white" data-note="E"></div>
+                <div class="key white" data-note="F"></div>
+                <div class="key black" data-note="F#"></div>
+                <div class="key white" data-note="G"></div>
+                <div class="key black" data-note="G#"></div>
+                <div class="key white" data-note="A"></div>
+                <div class="key black" data-note="A#"></div>
+                <div class="key white" data-note="B"></div>
+            </div>
+            <!-- Large size -->
+            <div class="octave" data-octave="5">
+                <div class="key white" data-note="C"></div>
+                <div class="key black" data-note="C#"></div>
+                <div class="key white" data-note="D"></div>
+                <div class="key black" data-note="D#"></div>
+                <div class="key white" data-note="E"></div>
+                <div class="key white" data-note="F"></div>
+                <div class="key black" data-note="F#"></div>
+                <div class="key white" data-note="G"></div>
+                <div class="key black" data-note="G#"></div>
+                <div class="key white" data-note="A"></div>
+                <div class="key black" data-note="A#"></div>
+                <div class="key white" data-note="B"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let piano = Synth.createInstrument('piano');
+        let keys = document.querySelectorAll('.key');
+
+        for (let key of keys) {
+            key.addEventListener('mousedown', function() {
+                let note = this.dataset.note;
+                let octave = this.parentElement.dataset.octave;
+
+                piano.play(note, octave, 2);
+            });
+        }
+
+        document.addEventListener('keydown', function(event) {
+            let kb = event.key;
+            let key = document.querySelector(
+                `.key[data-kb="${kb}"]`);
+               // '.key[data-kb="'+kb+'"]')
+            if (key) {
+                key.classList.add('pressed');
+                let note = key.dataset.note;
+                let octave = key.parentElement.dataset.octave;
+
+                piano.play(note, octave, 2);
+                setTimeout(function() {
+                    let key = document.querySelector(
+                      `.key[data-kb="${event.key}"]`);
+                    key.classList.remove('pressed'); 
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>
