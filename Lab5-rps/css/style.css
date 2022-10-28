@@ -106,3 +106,20 @@ header > h1 {
     font-size: 20px;
     margin-top: 20px;
 }
+
+@keyframes ready {
+    0%, 100% {
+        top: 0;
+    }
+    25% {
+        top: -10px;
+    }
+    75% {
+        top: 10px;
+    }
+}
+
+.ready {
+    position: relative;
+    animation: ready 0.5s linear infinite;
+}
