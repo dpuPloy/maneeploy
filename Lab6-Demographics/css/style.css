@@ -1,0 +1,26 @@
+label {
+  display: inline-block;
+  width: 50px;
+}
+
+select {
+  padding: 5px;
+}
+
+#report {
+  display: flex;
+}
+
+#chart {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+#stat {
+  flex-basis: 300px;
+  text-align: left;
+}
+
+tr {
+  line-height: 2em;
+}

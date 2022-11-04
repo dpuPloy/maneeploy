@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demographics (Statistics)</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <p>
+      <label for="year">ปี</label>
+      <select id="year" onchange="resetMonth()"></select>
+    </p>
+    <p>
+      <label for="month">เดือน</label>
+      <select id="month" onchange="resetDname()"></select>
+    </p>
+    <p>
+      <label for="dname">เขต</label>
+      <select id="dname" onchange="report()"></select>
+    </p>
+    <div id="report">
+      <div id="chart"></div>
+      <div id="stat">
+        <table>
+          <tr>
+            <th>Mean:</th>
+            <td id="mean"></td>
+          </tr>
+          <tr>
+            <th>Median:</th>
+            <td id="median"></td>
+          </tr>
+          <tr>
+            <th>Mode:</th>
+            <td id="mode"></td>
+          </tr>
+          <tr>
+            <th>Variance:</th>
+            <td id="variance"></td>
+          </tr>
+          <tr>
+            <th>SD:</th>
+            <td id="sd"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <script src="js/load_data.js"></script>
+    <script src="js/months.js"></script>
+    <script>
+      const year_filter = document.getElementById("year");
+      const month_filter = document.getElementById("month");
+      const dname_filter = document.getElementById("dname");
+
+      let years = new Set(data.map((d) => d.year_save));
+      years = [...years].sort();
+      year_filter.innerHTML = "";
+      for (let y of years) {
+        year_filter.innerHTML += `<option>${y}</option>`;
+      }
+      resetMonth();
+
+      function resetMonth() {
+        const selectedYear = year_filter.value;
+        const focus = data.filter((d) => d.year_save == selectedYear);
+        let months = new Set(focus.map((d) => d.month_save));
+        months = [...months].sort(
+          (m1, m2) => months_th.indexOf(m1) - months_th.indexOf(m2)
+        );
+        month_filter.innerHTML = "";
+        for (let m of months) {
+          month_filter.innerHTML += `<option>${m}</option>`;
+        }
+        resetDname();
+      }
+
+      function resetDname() {
+        const selectedYear = year_filter.value;
+        const selectedMonth = month_filter.value;
+        const focus = data.filter(
+          (d) => d.year_save == selectedYear && d.month_save == selectedMonth
+        );
+        let dnames = new Set(focus.map((d) => d.dname));
+        dnames = [...dnames].sort();
+        dname_filter.innerHTML = "";
+        for (let n of dnames) {
+          dname_filter.innerHTML += `<option>${n}</option>`;
+        }
+        report();
+      }
+
+      function report() {
+        const selectedYear = year_filter.value;
+        const selectedMonth = month_filter.value;
+        const selectedDname = dname_filter.value;
+        const focus = data.filter(
+          (d) =>
+            d.year_save == selectedYear &&
+            d.month_save == selectedMonth &&
+            d.dname == selectedDname
+        )[0];
+        const chart_labels = Array.from({ length: 100 }, (_, i) => i + 1);
+        const chart_data = Array.from(chart_labels, (a, _) => focus["age" + a]);
+        const chart = document.getElementById("chart");
+        chart.innerHTML = "<canvas></canvas>";
+        new Chart(chart.children[0], {
+          type: "bar",
+          data: {
+            labels: chart_labels,
+            datasets: [
+              {
+                label: "จำนวนประชากร",
+                data: chart_data,
+                backgroundColor: "#2b4f56",
+              },
+            ],
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
