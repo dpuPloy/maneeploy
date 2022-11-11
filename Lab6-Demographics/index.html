@@ -67,109 +67,105 @@
             year_filter.innerHTML += `<option>${y}</option>`;
           }
           resetMonth();
-
-          function resetMonth() {
-            const selectedYear = year_filter.value;
-            const focus = data.filter((d) => d.year_save == selectedYear);
-            let months = new Set(focus.map((d) => d.month_save));
-            months = [...months].sort(
-              (m1, m2) => months_th.indexOf(m1) - months_th.indexOf(m2)
-            );
-            month_filter.innerHTML = "";
-            for (let m of months) {
-              month_filter.innerHTML += `<option>${m}</option>`;
-            }
-            resetDname();
-          }
-
-          function resetDname() {
-            const selectedYear = year_filter.value;
-            const selectedMonth = month_filter.value;
-            const focus = data.filter(
-              (d) =>
-                d.year_save == selectedYear && d.month_save == selectedMonth
-            );
-            let dnames = new Set(focus.map((d) => d.dname));
-            dnames = [...dnames].sort();
-            dname_filter.innerHTML = "";
-            for (let n of dnames) {
-              dname_filter.innerHTML += `<option>${n}</option>`;
-            }
-            report();
-          }
-
-          function report() {
-            const selectedYear = year_filter.value;
-            const selectedMonth = month_filter.value;
-            const selectedDname = dname_filter.value;
-            const focus = data.filter(
-              (d) =>
-                d.year_save == selectedYear &&
-                d.month_save == selectedMonth &&
-                d.dname == selectedDname
-            )[0];
-            const chart_labels = Array.from({ length: 100 }, (_, i) => i + 1);
-            const chart_data = Array.from(
-              chart_labels,
-              (a, _) => focus["age" + a]
-            );
-            const chart = document.getElementById("chart");
-            chart.innerHTML = "<canvas></canvas>";
-            new Chart(chart.children[0], {
-              type: "bar",
-              data: {
-                labels: chart_labels,
-                datasets: [
-                  {
-                    label: "จำนวนประชากร",
-                    data: chart_data,
-                    backgroundColor: "#2b4f56",
-                  },
-                ],
-              },
-            });
-            // Mean
-            let sum_age = 0;
-            let population = 0;
-            for (let i = 0; i < 100; i++) {
-              sum_age += chart_labels[i] * chart_data[i];
-              population += chart_data[i];
-            }
-            const mean_age = sum_age / population;
-            document.getElementById("mean").innerHTML = mean_age;
-            // Median
-            const median_pos = Math.floor(population / 2);
-            let comm_pos = 0;
-            let index = -1;
-            while (comm_pos < median_pos) {
-              comm_pos += chart_data[++index];
-            }
-            const median_age =
-              population % 2 == 0 && comm_pos == median_pos
-                ? index + 1.5
-                : index + 1;
-            document.getElementById("median").innerHTML = median_age;
-            // Mode
-            let mode_age = 0;
-            let big_age = 0;
-            for (let i = 0; i < 100; i++) {
-              if (chart_data[i] > big_age) {
-                big_age = chart_data[i];
-                mode_age = i + 1;
-              }
-            }
-            document.getElementById("mode").innerHTML = mode_age;
-            // Variance
-            const variance =
-              chart_data.reduce((sum_sq, value, index) => {
-                return (sum_sq += (index + 1 - mean_age) ** 2 * value);
-              }, 0) / population;
-            document.getElementById("variance").innerHTML = variance;
-            // SD
-            const sd = variance ** 0.5;
-            document.getElementById("sd").innerHTML = sd;
-          }
         });
+
+      function resetMonth() {
+        const selectedYear = year_filter.value;
+        const focus = data.filter((d) => d.year_save == selectedYear);
+        let months = new Set(focus.map((d) => d.month_save));
+        months = [...months].sort(
+          (m1, m2) => months_th.indexOf(m1) - months_th.indexOf(m2)
+        );
+        month_filter.innerHTML = "";
+        for (let m of months) {
+          month_filter.innerHTML += `<option>${m}</option>`;
+        }
+        resetDname();
+      }
+
+      function resetDname() {
+        const selectedYear = year_filter.value;
+        const selectedMonth = month_filter.value;
+        const focus = data.filter(
+          (d) => d.year_save == selectedYear && d.month_save == selectedMonth
+        );
+        let dnames = new Set(focus.map((d) => d.dname));
+        dnames = [...dnames].sort();
+        dname_filter.innerHTML = "";
+        for (let n of dnames) {
+          dname_filter.innerHTML += `<option>${n}</option>`;
+        }
+        report();
+      }
+
+      function report() {
+        const selectedYear = year_filter.value;
+        const selectedMonth = month_filter.value;
+        const selectedDname = dname_filter.value;
+        const focus = data.filter(
+          (d) =>
+            d.year_save == selectedYear &&
+            d.month_save == selectedMonth &&
+            d.dname == selectedDname
+        )[0];
+        const chart_labels = Array.from({ length: 100 }, (_, i) => i + 1);
+        const chart_data = Array.from(chart_labels, (a, _) => focus["age" + a]);
+        const chart = document.getElementById("chart");
+        chart.innerHTML = "<canvas></canvas>";
+        new Chart(chart.children[0], {
+          type: "bar",
+          data: {
+            labels: chart_labels,
+            datasets: [
+              {
+                label: "จำนวนประชากร",
+                data: chart_data,
+                backgroundColor: "#2b4f56",
+              },
+            ],
+          },
+        });
+        // Mean
+        let sum_age = 0;
+        let population = 0;
+        for (let i = 0; i < 100; i++) {
+          sum_age += chart_labels[i] * chart_data[i];
+          population += chart_data[i];
+        }
+        const mean_age = sum_age / population;
+        document.getElementById("mean").innerHTML = mean_age;
+        // Median
+        const median_pos = Math.floor(population / 2);
+        let comm_pos = 0;
+        let index = -1;
+        while (comm_pos < median_pos) {
+          comm_pos += chart_data[++index];
+        }
+        const median_age =
+          population % 2 == 0 && comm_pos == median_pos
+            ? index + 1.5
+            : index + 1;
+        document.getElementById("median").innerHTML = median_age;
+        // Mode
+        let mode_age = 0;
+        let big_age = 0;
+        for (let i = 0; i < 100; i++) {
+          if (chart_data[i] > big_age) {
+            big_age = chart_data[i];
+            mode_age = i + 1;
+          }
+        }
+        document.getElementById("mode").innerHTML = mode_age;
+        // Variance
+        const variance =
+          chart_data.reduce((sum_sq, value, index) => {
+            return (sum_sq += (index + 1 - mean_age) ** 2 * value);
+          }, 0) / population;
+        document.getElementById("variance").innerHTML = variance;
+        // SD
+        const sd = variance ** 0.5;
+        document.getElementById("sd").innerHTML = sd;
+      }
     </script>
   </body>
 </html>
