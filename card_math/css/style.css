@@ -1,0 +1,62 @@
+.deck-card {
+  background-image: url("../image/deck.png");
+  width: 79px;
+  height: 123px;
+  display: inline-block;
+  margin: 5px;
+}
+.club {
+  background-position-y: 0px;
+}
+.diamond {
+  background-position-y: -123px;
+}
+.heart {
+  background-position-y: -246px;
+}
+.spade {
+  background-position-y: -369px;
+}
+.mA {
+  background-position-x: 0;
+}
+.m2 {
+  background-position-x: -79px;
+}
+.m3 {
+  background-position-x: -158px;
+}
+.m4 {
+  background-position-x: -237px;
+}
+.m5 {
+  background-position-x: -316px;
+}
+.m6 {
+  background-position-x: -395px;
+}
+.m7 {
+  background-position-x: -474px;
+}
+.m8 {
+  background-position-x: -553px;
+}
+.m9 {
+  background-position-x: -632px;
+}
+.m10 {
+  background-position-x: -711px;
+}
+.mJ {
+  background-position-x: -790px;
+}
+.mQ {
+  background-position-x: -869px;
+}
+.mK {
+  background-position-x: -948px;
+}
+body {
+  padding: 10px 0;
+  background-color: #00827f;
+}
